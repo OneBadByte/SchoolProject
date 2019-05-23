@@ -2,17 +2,18 @@ package com.blackdartq.schoolproject;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+
+import com.blackdartq.schoolproject.Utils.Term;
+
+import java.util.ArrayList;
 
 public class TermActivity extends AppCompatActivity {
     // views
@@ -25,7 +26,12 @@ public class TermActivity extends AppCompatActivity {
     Button deleteTermButton;
     Button backTermButton;
 
+    ArrayList<Button> buttonHolder;
+
+    int selectedTerm = 0;
+
     private static final String TAG = TermActivity.class.getSimpleName();
+    DBUtils dbUtils = new DBUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,8 @@ public class TermActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        buttonHolder = new ArrayList<>();
+        dbUtils = new DBUtils();
         termScrollView = findViewById(R.id.termScrollView);
         termLinearLayout = findViewById(R.id.termLinearLayout);
         addTermButton = findViewById(R.id.addTermButton);
@@ -40,19 +48,7 @@ public class TermActivity extends AppCompatActivity {
         deleteTermButton = findViewById(R.id.deleteTermButton);
         backTermButton = findViewById(R.id.backTermButton);
 
-        int selectedTerm = 0;
-
-        for(int i = 0; i < 5; i++){
-            final Button button = new Button(this);
-            button.setText("Term " + i);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    button.setBackgroundColor(Color.GREEN);
-                }
-            });
-            termLinearLayout.addView(button);
-        }
+        addTermButtonsToUI();
 
         addTermButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +67,8 @@ public class TermActivity extends AppCompatActivity {
         deleteTermButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TermActivity.this, AddModifyTerm.class));
+                dbUtils.deleteTermByIndex(selectedTerm);
+                termLinearLayout.removeViewAt(selectedTerm);
             }
         });
 
@@ -84,4 +81,26 @@ public class TermActivity extends AppCompatActivity {
 
     }
 
+    void addTermButtonsToUI(){
+        ArrayList<Term> terms = dbUtils.getTerms();
+        for(Term term : terms){
+            createTermButton(term);
+        }
+        for(Button button : buttonHolder){
+            termLinearLayout.addView(button);
+        }
+    }
+
+    void createTermButton(final Term term) {
+        final Button button = new Button(this);
+        button.setText(term.getName());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button.setBackgroundColor(Color.GREEN);
+                selectedTerm = termLinearLayout.indexOfChild(button);
+            }
+        });
+        buttonHolder.add(button);
+    }
 }

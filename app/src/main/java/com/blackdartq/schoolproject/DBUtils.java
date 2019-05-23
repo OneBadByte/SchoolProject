@@ -1,16 +1,99 @@
 package com.blackdartq.schoolproject;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
-class DBUtils {
-    static String testDB(){
-       String query = "select sqlite_version() AS sqlite_version";
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(":memory:", null);
-        Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToNext()){
-            return cursor.getString(0);
-        }
-        throw new RuntimeException("db is fucked up");
+import com.blackdartq.schoolproject.Utils.Term;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
+
+public class DBUtils{
+
+    SQLiteDatabase db;
+    ArrayList<Term> terms;
+    private final String DATABASE_PATH = "/data/data/com.blackdartq.schoolproject/files/test.db";
+
+    DBUtils(){
+       db = SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+       db.execSQL(
+               "CREATE TABLE IF NOT EXISTS term(" +
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                       "name VARCHAR(50)" +
+                       "" +
+                       ");");
+//       db.execSQL("INSERT INTO term VALUES(null, 'TERM 1'), (null, 'TERM 2')");
+       terms = getTerms();
     }
+
+    public String getPath(){
+        return db.getPath();
+    }
+
+    ArrayList<Term> getTerms(){
+        ArrayList<Term> terms = new ArrayList<>();
+        String[] columns = {"id", "name"};
+        Cursor cursor = db.query("term", columns, null, null, null, null, null);
+        while (cursor.moveToNext()){
+            Term term = new Term();
+            term.setId(cursor.getInt(0));
+            term.setName(cursor.getString(1));
+            terms.add(term);
+        }
+        return terms;
+    }
+
+    int getIdFromIndex(int index){
+        return terms.get(index).getId();
+    }
+
+    int getIndexFromName(String name){
+        int count = 0;
+        for(Term term : terms){
+            if(term.getName().equals(name)){
+                return count;
+            }
+            count++;
+        }
+        throw new RuntimeException("couldn't find index by name");
+    }
+
+    int getIdFromTermName(String name){
+        String[] query = {name};
+        Cursor cursor = db.rawQuery("SELECT id FROM term WHERE name = ?", query);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
+    void addTerm(String name){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        db.insert("term", null, contentValues);
+        terms.clear();
+        terms = getTerms();
+    }
+
+    void deleteTermByIndex(int index){
+        int id = terms.get(index).getId();
+        String[] args = {String.valueOf(id)};
+        db.delete("term", "id = ?", args);
+        terms.clear();
+        terms = getTerms();
+    }
+
+    boolean dropTables(){
+        try{
+            db.execSQL("DROP TABLE term;");
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
 }

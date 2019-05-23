@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blackdartq.schoolproject.Utils.Term;
 
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,8 +54,13 @@ public class MainActivity extends AppCompatActivity {
         alertEditText = findViewById(R.id.alertEditText);
 
         // Layouts
+        dbUtils = new DBUtils();
+        ArrayList<Term> stuff = dbUtils.getTerms();
+        dbUtils.addTerm("fuck this shit");
+        sendMessage(stuff.get(dbUtils.getIndexFromName("fuck this shit")).getName());
+//        dbUtils.dropTables();
 
-        sendMessage(DBUtils.testDB());
+        //sendMessage(DBUtils.testDB());
 
         termButton.setOnClickListener(new View.OnClickListener() {
             @Override
