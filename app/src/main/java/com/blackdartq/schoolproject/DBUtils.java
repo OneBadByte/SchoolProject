@@ -21,13 +21,14 @@ public class DBUtils{
 
     DBUtils(){
        db = SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+//       dropTables();
        db.execSQL(
                "CREATE TABLE IF NOT EXISTS term(" +
                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                        "name VARCHAR(50)" +
-                       "" +
+                       ", start_date TEXT" +
+                       ", end_date TEXT" +
                        ");");
-//       db.execSQL("INSERT INTO term VALUES(null, 'TERM 1'), (null, 'TERM 2')");
        terms = getTerms();
     }
 
@@ -70,9 +71,11 @@ public class DBUtils{
         return cursor.getInt(0);
     }
 
-    void addTerm(String name){
+    void addTerm(String name, String startDate, String endDate){
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
+        contentValues.put("start_date", startDate);
+        contentValues.put("end_date", endDate);
         db.insert("term", null, contentValues);
         terms.clear();
         terms = getTerms();
@@ -93,6 +96,10 @@ public class DBUtils{
         }catch (Exception e){
             return false;
         }
+    }
+
+    void dropConnection(){
+        db.close();
     }
 
 

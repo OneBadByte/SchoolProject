@@ -38,28 +38,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add" />
+                android:background="#9ece9a"
+                android:text="Add"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/modifyTermButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Modify" />
+                android:background="#9ece9a"
+                android:text="Modify"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/deleteTermButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Delete" />
+                android:background="#9ece9a"
+                android:text="Delete"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/backTermButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="back  " />
+                android:background="#9ece9a"
+                android:text="back  "
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
     </LinearLayout>

@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         // Layouts
         dbUtils = new DBUtils();
         ArrayList<Term> stuff = dbUtils.getTerms();
-        dbUtils.addTerm("fuck this shit");
-        sendMessage(stuff.get(dbUtils.getIndexFromName("fuck this shit")).getName());
+        dbUtils.addTerm("fuck this shit", "date('now')", "date('now')");
+//        sendMessage(stuff.get(dbUtils.getIndexFromName("fuck this shit")).getName());
 //        dbUtils.dropTables();
 
         //sendMessage(DBUtils.testDB());
