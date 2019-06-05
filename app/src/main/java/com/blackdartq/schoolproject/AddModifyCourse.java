@@ -1,9 +1,8 @@
 package com.blackdartq.schoolproject;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,79 +10,97 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blackdartq.schoolproject.Utils.Term;
+import com.blackdartq.schoolproject.Utils.Course;
 import com.blackdartq.schoolproject.Utils.Utils;
 
 import java.util.ArrayList;
 
-public class AddModifyTerm extends AppCompatActivity {
+public class AddModifyCourse extends AppCompatActivity {
 
-    public String termNameLoader = "";
+    public String courseNameLoader = "";
     String startDateLoader = "";
     String endDateLoader = "";
 
     DBUtils dbUtils;
 
-    Button termSaveButton;
-    Button termCancelButton;
+    Button courseSaveButton;
+    Button courseCancelButton;
 
-    EditText termNameEditText;
+    EditText courseNameEditText;
     EditText startDateEditText;
     EditText endDateEditText;
+    EditText statusEditText;
+    EditText mentorNameEditText;
+    EditText phoneNumberEditText;
+    EditText emailEditText;
 
     TextView messageTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_modify_term);
+        setContentView(R.layout.activity_add_modify_course);
         dbUtils = new DBUtils();
         final Intent intent = getIntent();
 
-        termSaveButton = findViewById(R.id.termSaveButton);
-        termCancelButton = findViewById(R.id.termCancelButton);
-        termNameEditText = findViewById(R.id.termNameEditText);
+        courseSaveButton = findViewById(R.id.courseSaveButton);
+        courseCancelButton = findViewById(R.id.courseCancelButton);
+        courseNameEditText = findViewById(R.id.courseNameEditText);
         startDateEditText = findViewById(R.id.startDateEditText);
         endDateEditText = findViewById(R.id.endDateEditText);
+        statusEditText = findViewById(R.id.statusEditText);
+        mentorNameEditText = findViewById(R.id.mentorNameEditText);
+        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        emailEditText = findViewById(R.id.emailEditText);
+
+
         messageTextView = findViewById(R.id.messageTextView);
 
-        termNameEditText.setText(intent.getStringExtra("termNameLoader"));
+        courseNameEditText.setText(intent.getStringExtra("courseNameLoader"));
         startDateEditText.setText(intent.getStringExtra("startDateLoader"));
         endDateEditText.setText(intent.getStringExtra("endDateLoader"));
 
-        termSaveButton.setOnClickListener(new View.OnClickListener() {
+        courseSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkInputFieldsAreValid() ){
                     if(intent.getBooleanExtra("modifying", false)){
-                        int termId = dbUtils.getIdFromIndex(intent.getIntExtra("termIndex", 0));
-                        dbUtils.updateTerm(new Term(
-                                termId,
-                                termNameEditText.getText().toString(),
+                        int courseId = dbUtils.getIdFromIndex(intent.getIntExtra("courseIndex", 0));
+                        dbUtils.updateCourse(new Course(
+                                courseId,
+                                courseNameEditText.getText().toString(),
                                 startDateEditText.getText().toString(),
-                                endDateEditText.getText().toString()
+                                endDateEditText.getText().toString(),
+                                statusEditText.getText().toString(),
+                                mentorNameEditText.getText().toString(),
+                                phoneNumberEditText.getText().toString(),
+                                emailEditText.getText().toString()
                         ));
 
                     }else{
-                        dbUtils.addTerm(
-                                termNameEditText.getText().toString(),
+                        dbUtils.addCourse(
+                                courseNameEditText.getText().toString(),
                                 startDateEditText.getText().toString(),
-                                endDateEditText.getText().toString()
+                                endDateEditText.getText().toString(),
+                                statusEditText.getText().toString(),
+                                mentorNameEditText.getText().toString(),
+                                phoneNumberEditText.getText().toString(),
+                                emailEditText.getText().toString()
                         );
                     }
-                    startActivity(new Intent(AddModifyTerm.this, TermActivity.class));
+                    startActivity(new Intent(AddModifyCourse.this, CourseActivity.class));
                 }
             }
         });
 
-        termCancelButton.setOnClickListener(new View.OnClickListener() {
+        courseCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddModifyTerm.this, TermActivity.class));
+                startActivity(new Intent(AddModifyCourse.this, CourseActivity.class));
             }
         });
 
-        termNameEditText.addTextChangedListener(new TextWatcher() {
+        courseNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -95,9 +112,9 @@ public class AddModifyTerm extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.toString().equals("")){
-                   Utils.changeBackgroundColorToRed(termNameEditText);
+                   Utils.changeBackgroundColorToRed(courseNameEditText);
                 }else {
-                    Utils.changeBackgroundColorToWhite(termNameEditText);
+                    Utils.changeBackgroundColorToWhite(courseNameEditText);
                 }
             }
         });
@@ -152,9 +169,9 @@ public class AddModifyTerm extends AppCompatActivity {
      * @param startDate
      * @param endDate
      */
-    public void loadTermData(String name, String startDate, String endDate){
+    public void loadCourseData(String name, String startDate, String endDate){
         System.out.println("loading data");
-        termNameLoader = name;
+        courseNameLoader = name;
         startDateLoader = startDate;
         endDateLoader = endDate;
     }
@@ -196,11 +213,11 @@ public class AddModifyTerm extends AppCompatActivity {
 
     boolean checkInputFieldsAreValid(){
         boolean output = true;
-        if(termNameEditText.getText().toString().equals("")){
-            Utils.changeBackgroundColorToRed(termNameEditText);
+        if(courseNameEditText.getText().toString().equals("")){
+            Utils.changeBackgroundColorToRed(courseNameEditText);
             output = false;
         }else{
-            Utils.changeBackgroundColorToWhite(termNameEditText);
+            Utils.changeBackgroundColorToWhite(courseNameEditText);
         }
 
         if(startDateEditText.getText().toString().equals("")) {

@@ -3,18 +3,11 @@ package com.blackdartq.schoolproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.blackdartq.schoolproject.Utils.Term;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,13 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Layouts
         dbUtils = new DBUtils();
-        ArrayList<Term> stuff = dbUtils.getTerms();
-        dbUtils.addTerm("fuck this shit", "date('now')", "date('now')");
-//        sendMessage(stuff.get(dbUtils.getIndexFromName("fuck this shit")).getName());
-//        dbUtils.dropTables();
-
-        //sendMessage(DBUtils.testDB());
-
         termButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         coursesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                startActivity(intent);
                 sendMessage("Courses");
             }
         });
-
-
     }
 
     @Override
