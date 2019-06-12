@@ -30,6 +30,17 @@
             android:layout_height="669dp"
             android:background="#f2f6f3">
 
+            <ScrollView
+                android:id="@+id/mainScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/termAndCourseLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
         </FrameLayout>
 
         <LinearLayout
@@ -60,6 +71,17 @@
                 android:text="Courses"
                 android:textColor="#f2f6f3"
                 android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/assignmentsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:background="@color/blackdartqGreen"
+                android:text="Assignment"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

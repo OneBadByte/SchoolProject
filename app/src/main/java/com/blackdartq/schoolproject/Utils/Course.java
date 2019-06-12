@@ -9,10 +9,14 @@ public class Course {
     private String mentorNames;
     private String phoneNumber;
     private String email;
+    private Integer termId;
 
 
     public Course(){ }
-    public Course(int id, String name, String startDate, String endDate, String status, String mentorName, String phoneNumber, String email){
+    public Course(
+            int id, String name, String startDate,
+            String endDate, String status, String mentorName,
+            String phoneNumber, String email, int termId){
         this.setId(id);
         this.setName(name);
         this.setStartDate(startDate);
@@ -21,6 +25,15 @@ public class Course {
         this.setMentorNames(mentorName);
         this.setPhoneNumber(phoneNumber);
         this.setEmail(email);
+        this.setTermId(termId);
+    }
+
+    public Integer getTermId() {
+        return termId;
+    }
+
+    public void setTermId(Integer termId) {
+        this.termId = termId;
     }
 
     public String getStartDate() {

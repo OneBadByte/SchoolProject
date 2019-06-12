@@ -2,18 +2,12 @@ package com.blackdartq.schoolproject;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.mbms.MbmsErrors;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.blackdartq.schoolproject.Utils.Term;
@@ -37,6 +31,8 @@ public class TermActivity extends AppCompatActivity {
     ArrayList<Button> buttonHolder;
 
     int selectedTerm = 0;
+    Term term;
+    Toolbar termActivityToolbar;
 
     private static final String TAG = TermActivity.class.getSimpleName();
     DBUtils dbUtils = new DBUtils();
@@ -45,8 +41,8 @@ public class TermActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.termActivityToolbar);
+//        setSupportActionBar(toolbar);
         buttonHolder = new ArrayList<>();
         dbUtils = new DBUtils();
         termScrollView = findViewById(R.id.termScrollView);
@@ -55,6 +51,7 @@ public class TermActivity extends AppCompatActivity {
         modifyTermButton = findViewById(R.id.modifyTermButton);
         deleteTermButton = findViewById(R.id.deleteTermButton);
         backTermButton = findViewById(R.id.backTermButton);
+        termActivityToolbar = findViewById(R.id.termActivityToolbar);
 
         addTermButtonsToUI();
 
@@ -71,23 +68,38 @@ public class TermActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TermActivity.this, AddModifyTerm.class);
+                try{
+                    Term termData = dbUtils.getTermFromIndex(selectedTerm);
+                    intent.putExtra("termNameLoader", termData.getName());
+                    intent.putExtra("startDateLoader", termData.getStartDate());
+                    intent.putExtra("endDateLoader", termData.getEndDate());
+                    intent.putExtra("modifying", true);
+                    int termIdFromIndex = dbUtils.getTermIdFromIndex(selectedTerm);
+                    intent.putExtra("termIdLoader", termIdFromIndex);
 
-                Term termData = dbUtils.getTermFromIndex(selectedTerm);
-                intent.putExtra("termNameLoader", termData.getName());
-                intent.putExtra("startDateLoader", termData.getStartDate());
-                intent.putExtra("endDateLoader", termData.getEndDate());
-                intent.putExtra("modifying", true);
-                intent.putExtra("termIndex", selectedTerm);
-
-                startActivity(intent);
+                    startActivity(intent);
+                } catch (Exception e){
+                }
             }
         });
 
         deleteTermButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbUtils.deleteTermByIndex(selectedTerm);
-                termLinearLayout.removeViewAt(selectedTerm);
+                // checks if the term has courses and wont delete if it does
+                int termId = dbUtils.getTermIdFromIndex(selectedTerm);
+                if(dbUtils.termHasCourses(termId)){
+                    sendError("Please remove courses from term!");
+                    return;
+                }
+
+                // trys to delete the term and removes it from the UI
+                try{
+                    dbUtils.deleteTermByIndex(selectedTerm);
+                    termLinearLayout.removeViewAt(selectedTerm);
+                } catch (Exception e){
+                    throw new RuntimeException("Couldn't delete term " + termId);
+                }
             }
         });
 
@@ -98,6 +110,15 @@ public class TermActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    void sendMessage(String message){
+        termActivityToolbar.setTitle(message);
+    }
+
+    void sendError(String message){
+        termActivityToolbar.setBackgroundColor(Color.RED);
+        sendMessage(message);
     }
 
     void addTermButtonsToUI(){

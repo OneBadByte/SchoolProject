@@ -62,16 +62,21 @@ public class CourseActivity extends AppCompatActivity {
         modifyCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CourseActivity.this, AddModifyCourse.class);
+                try{
+                    Intent intent = new Intent(CourseActivity.this, AddModifyCourse.class);
 
-                Course courseData = dbUtils.getCourseFromIndex(selectedCourse);
-                intent.putExtra("courseNameLoader", courseData.getName());
-                intent.putExtra("startDateLoader", courseData.getStartDate());
-                intent.putExtra("endDateLoader", courseData.getEndDate());
-                intent.putExtra("modifying", true);
-                intent.putExtra("courseIndex", selectedCourse);
+                    Course courseData = dbUtils.getCourseFromIndex(selectedCourse);
+                    intent.putExtra("courseNameLoader", courseData.getName());
+                    intent.putExtra("startDateLoader", courseData.getStartDate());
+                    intent.putExtra("endDateLoader", courseData.getEndDate());
+                    intent.putExtra("statusLoader", courseData.getStatus());
+                    intent.putExtra("mentorNameLoader", courseData.getMentorNames());
+                    intent.putExtra("phoneNumberLoader", courseData.getPhoneNumber());
+                    intent.putExtra("emailLoader", courseData.getEmail());
+                    intent.putExtra("modifying", true);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } catch (Exception e){}
             }
         });
 

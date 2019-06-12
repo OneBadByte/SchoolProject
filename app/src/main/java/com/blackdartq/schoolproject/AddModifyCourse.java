@@ -36,6 +36,8 @@ public class AddModifyCourse extends AppCompatActivity {
 
     TextView messageTextView;
 
+    int termCurrentlySelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class AddModifyCourse extends AppCompatActivity {
         courseCancelButton = findViewById(R.id.courseCancelButton);
         courseNameEditText = findViewById(R.id.courseNameEditText);
         startDateEditText = findViewById(R.id.startDateEditText);
-        endDateEditText = findViewById(R.id.endDateEditText);
+        endDateEditText = findViewById(R.id.dueDateEditText);
         statusEditText = findViewById(R.id.statusEditText);
         mentorNameEditText = findViewById(R.id.mentorNameEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
@@ -59,13 +61,18 @@ public class AddModifyCourse extends AppCompatActivity {
         courseNameEditText.setText(intent.getStringExtra("courseNameLoader"));
         startDateEditText.setText(intent.getStringExtra("startDateLoader"));
         endDateEditText.setText(intent.getStringExtra("endDateLoader"));
+        statusEditText.setText(intent.getStringExtra("statusLoader"));
+        mentorNameEditText.setText(intent.getStringExtra("mentorNameLoader"));
+        phoneNumberEditText.setText(intent.getStringExtra("phoneNumberLoader"));
+        emailEditText.setText(intent.getStringExtra("emailLoader"));
 
         courseSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkInputFieldsAreValid() ){
                     if(intent.getBooleanExtra("modifying", false)){
-                        int courseId = dbUtils.getIdFromIndex(intent.getIntExtra("courseIndex", 0));
+                        int courseId = dbUtils.getCourseIdFromIndex(intent.getIntExtra("courseIndex", 0));
+
                         dbUtils.updateCourse(new Course(
                                 courseId,
                                 courseNameEditText.getText().toString(),
@@ -74,7 +81,9 @@ public class AddModifyCourse extends AppCompatActivity {
                                 statusEditText.getText().toString(),
                                 mentorNameEditText.getText().toString(),
                                 phoneNumberEditText.getText().toString(),
-                                emailEditText.getText().toString()
+                                emailEditText.getText().toString(),
+                                0
+
                         ));
 
                     }else{
@@ -85,7 +94,8 @@ public class AddModifyCourse extends AppCompatActivity {
                                 statusEditText.getText().toString(),
                                 mentorNameEditText.getText().toString(),
                                 phoneNumberEditText.getText().toString(),
-                                emailEditText.getText().toString()
+                                emailEditText.getText().toString(),
+                                0
                         );
                     }
                     startActivity(new Intent(AddModifyCourse.this, CourseActivity.class));
@@ -209,7 +219,6 @@ public class AddModifyCourse extends AppCompatActivity {
         }
         return  true;
     }
-
 
     boolean checkInputFieldsAreValid(){
         boolean output = true;

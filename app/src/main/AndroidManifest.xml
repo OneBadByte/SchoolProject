@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddModifyCourse"></activity>
+        <activity android:name=".AssignmentActivity"></activity>
+        <activity android:name=".AddModifyCourse" />
+        <activity android:name=".AddModifyAssignment" />
         <activity android:name=".CourseActivity" />
         <activity android:name=".AddModifyTerm" />
         <activity
@@ -18,7 +20,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

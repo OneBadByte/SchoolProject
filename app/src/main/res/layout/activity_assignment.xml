@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:layout_constraintTop_toBottomOf="parent"
-    tools:context=".CourseActivity"
-    tools:showIn="@layout/activity_course">
+    tools:context=".AssignmentActivity"
+    tools:showIn="@layout/activity_assignment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,12 +17,12 @@
         tools:layout_editor_absoluteY="16dp">
 
         <ScrollView
-            android:id="@+id/courseScrollView"
+            android:id="@+id/assignmentScrollView"
             android:layout_width="match_parent"
-            android:layout_height="667dp">
+            android:layout_height="720dp">
 
             <LinearLayout
-                android:id="@+id/courseLinearLayout"
+                android:id="@+id/assignmentLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
@@ -30,11 +30,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="63dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/addCourseButton"
+                android:id="@+id/addAssignmentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -43,7 +43,7 @@
                 android:textColor="@android:color/white" />
 
             <Button
-                android:id="@+id/modifyCourseButton"
+                android:id="@+id/modifyAssignmentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -52,7 +52,7 @@
                 android:textColor="@android:color/white" />
 
             <Button
-                android:id="@+id/deleteCourseButton"
+                android:id="@+id/deleteAssignmentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
                 android:textColor="@android:color/white" />
 
             <Button
-                android:id="@+id/backCourseButton"
+                android:id="@+id/backAssignmentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
