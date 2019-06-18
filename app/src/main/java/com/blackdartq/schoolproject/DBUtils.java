@@ -9,6 +9,7 @@ import com.blackdartq.schoolproject.Utils.Course;
 import com.blackdartq.schoolproject.Utils.Term;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBUtils {
 
@@ -24,7 +25,6 @@ public class DBUtils {
         terms = new ArrayList<>();
         courses = new ArrayList<>();
         assignments = new ArrayList<>();
-//       dropTables();
 
         // creates the term table
         db.execSQL(
@@ -46,6 +46,7 @@ public class DBUtils {
                         "mentor_name VARCHAR(50), " +
                         "phone_number VARCHAR(11), " +
                         "email VARCHAR(50)," +
+                        "optional_note VARCHAR(200)," +
                         "term_id INTEGER," +
                         "FOREIGN KEY(term_id) REFERENCES term(id)" +
                         ");"
@@ -67,7 +68,63 @@ public class DBUtils {
         terms = getTerms();
         courses = getCourses();
         assignments = getAssignments();
-        addTestTermsAndCourses();
+    }
+
+    DBUtils(boolean debug) {
+        // creates the connection to the database
+        db = SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        terms = new ArrayList<>();
+        courses = new ArrayList<>();
+        assignments = new ArrayList<>();
+        if(debug){
+           dropTables();
+        }
+
+        // creates the term table
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS term(" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name VARCHAR(50)" +
+                        ", start_date TEXT" +
+                        ", end_date TEXT" +
+                        ");");
+
+        // creates the course table
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS course(" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name VARCHAR(50), " +
+                        "start_date TEXT, " +
+                        "end_date TEXT, " +
+                        "status VARCHAR(25), " +
+                        "mentor_name VARCHAR(50), " +
+                        "phone_number VARCHAR(11), " +
+                        "email VARCHAR(50)," +
+                        "optional_note VARCHAR(200)," +
+                        "term_id INTEGER," +
+                        "FOREIGN KEY(term_id) REFERENCES term(id)" +
+                        ");"
+        );
+
+        // creates the assignment table
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS assignment(" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "name VARCHAR, " +
+                        "optional_note VARCHAR," +
+                        "due_date VARCHAR," +
+                        "course_id INTEGER," +
+                        "FOREIGN KEY(course_id) REFERENCES course(id)" +
+                        ");"
+        );
+
+        // gets all the term/course data from the database and places them in an array
+        terms = getTerms();
+        courses = getCourses();
+        assignments = getAssignments();
+        if(debug){
+            addTestTermsAndCourses();
+        }
     }
 
     /**
@@ -99,7 +156,7 @@ public class DBUtils {
     Integer addTerm(){
         addTerm("", "", "");
         int id = getTermIdFromTermName("");
-        System.out.println("Returning id from db: " + id);
+//        System.out.println("Returning id from db: " + id);
         return id;
     }
 
@@ -212,6 +269,15 @@ public class DBUtils {
         addTerm("Term 1", "5/19/2019", "6/23/2019");
         addTerm("Term 2", "5/19/2019", "6/23/2019");
         addTerm("Term 3", "5/19/2019", "6/23/2019");
+        addTerm("Term 4", "5/19/2019", "6/23/2019");
+        addTerm("Term 5", "5/19/2019", "6/23/2019");
+        addTerm("Term 6", "5/19/2019", "6/23/2019");
+        addTerm("Term 7", "5/19/2019", "6/23/2019");
+        addTerm("Term 8", "5/19/2019", "6/23/2019");
+        addTerm("Term 9", "5/19/2019", "6/23/2019");
+        addTerm("Term 10", "5/19/2019", "6/23/2019");
+        addTerm("Term 11", "5/19/2019", "6/23/2019");
+        addTerm("Term 12", "5/19/2019", "6/23/2019");
         int term1Id = getTermIdFromIndex(0);
         int term2Id = getTermIdFromIndex(1);
 //        int term3Id = getTermIdFromIndex(2);
@@ -219,13 +285,22 @@ public class DBUtils {
         // Creates Courses
         addCourse("course 1", "5/29/2019", "5/29/19",
                 "Working On", "Dr. Phil", "80183834433",
-                "brody.prestwich18@gmail.com", term1Id);
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term1Id);
         addCourse("course 2", "5/29/2019", "5/29/19",
                 "Working On", "Dr. Phil", "80183834433",
-                "brody.prestwich18@gmail.com", term1Id);
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term1Id);
         addCourse("course 3", "5/29/2019", "5/29/19",
                 "Working On", "Dr. Phil", "80183834433",
-                "brody.prestwich18@gmail.com", term2Id);
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term2Id);
+        addCourse("course 4", "5/29/2019", "5/29/19",
+                "Working On", "Dr. Phil", "80183834433",
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term1Id);
+        addCourse("course 5", "5/29/2019", "5/29/19",
+                "Working On", "Dr. Phil", "80183834433",
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term1Id);
+        addCourse("course 6", "5/29/2019", "5/29/19",
+                "Working On", "Dr. Phil", "80183834433",
+                "brody.prestwich18@gmail.com", "TESTING OPTIONAL NOTE", term2Id);
         int course1Id = getCourseIdFromIndex(0);
         int course2Id = getCourseIdFromIndex(1);
 
@@ -236,6 +311,12 @@ public class DBUtils {
         addAssignment("Assignment 4", "this shit is whack", "5/29/2019", course2Id);
         addAssignment("Assignment 5", "this shit is whack", "5/29/2019", course1Id);
         addAssignment("Assignment 6", "this shit is whack", "5/29/2019", null);
+        addAssignment("Assignment 7", "this shit is whack", "5/29/2019", course1Id);
+        addAssignment("Assignment 8", "this shit is whack", "5/29/2019", course2Id);
+        addAssignment("Assignment 9", "this shit is whack", "5/29/2019", course2Id);
+        addAssignment("Assignment 10", "this shit is whack", "5/29/2019", course2Id);
+        addAssignment("Assignment 11", "this shit is whack", "5/29/2019", course1Id);
+        addAssignment("Assignment 12", "this shit is whack", "5/29/2019", null);
     }
 
     int getTermIdFromCourseIndex(int index){
@@ -306,7 +387,8 @@ public class DBUtils {
     ArrayList<Course> getCourses() {
         ArrayList<Course> courses = new ArrayList<>();
         String[] columns = {
-                "id", "name", "start_date", "end_date", "status", "mentor_name", "phone_number", "email", "term_id"
+                "id", "name", "start_date", "end_date", "status",
+                "mentor_name", "phone_number", "email", "optional_note", "term_id"
         };
         Cursor cursor = db.query("course", columns, null, null, null, null, null);
         while (cursor.moveToNext()) {
@@ -319,7 +401,8 @@ public class DBUtils {
             course.setMentorNames(cursor.getString(5));
             course.setPhoneNumber(cursor.getString(6));
             course.setEmail(cursor.getString(7));
-            course.setTermId(cursor.getInt(8));
+            course.setOptionalNote(cursor.getString(8));
+            course.setTermId(cursor.getInt(9));
             if(course.getTermId() == 0){
                 course.setTermId(null);
             }
@@ -387,10 +470,19 @@ public class DBUtils {
         return courses.get(index);
     }
 
+    Course getCourseFromId(int id){
+        for(Course course: courses){
+            if(course.getId() == id){
+                return  course;
+            }
+        }
+        throw new RuntimeException("Couldn't find course by that ID");
+    }
+
     void addCourse(
             String name, String startDate, String endDate,
             String status, String mentorName, String phoneNumber,
-            String email, Integer termId) {
+            String email, String optionalNote, Integer termId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("start_date", startDate);
@@ -399,6 +491,7 @@ public class DBUtils {
         contentValues.put("mentor_name", mentorName);
         contentValues.put("phone_number", phoneNumber);
         contentValues.put("email", email);
+        contentValues.put("optional_note", optionalNote);
         contentValues.put("term_id", termId);
         db.insert("course", null, contentValues);
         updateCoursesArray();
@@ -413,6 +506,7 @@ public class DBUtils {
         contentValues.put("mentor_name", course.getMentorNames());
         contentValues.put("phone_number", course.getPhoneNumber());
         contentValues.put("email", course.getEmail());
+        contentValues.put("optional_note", course.getOptionalNote());
         contentValues.put("term_id", course.getTermId());
         String[] args = {String.valueOf(course.getId())};
         db.update("course", contentValues, "id = ?", args);
@@ -443,9 +537,10 @@ public class DBUtils {
             assignment.setDueDate(cursor.getString(3));
             assignment.setCourseId(cursor.getInt(4));
             if(assignment.getId() == 0){
+//                System.out.println("SETTING ID TO NULL FOR SOME REASON");
                 assignment.setId(null);
             }
-            System.out.println("DB: " + assignment.getName());
+//            System.out.println("DB: " + assignment.getName());
             assignments.add(assignment);
         }
         return assignments;
@@ -478,6 +573,10 @@ public class DBUtils {
             index++;
         }
         addTermIdToAssignmentByIndex(courseId, index);
+    }
+
+    void deleteCourseIdFromAssignmentById(int assignmentId){
+
     }
 
     void addTermIdToAssignmentByIndex(int courseId, int assignmentIndex) {
@@ -528,6 +627,15 @@ public class DBUtils {
         return assignments.get(index);
     }
 
+    Assignment getAssignmentFromId(int id) {
+        for(Assignment assignment : assignments){
+            if(assignment.getId() == id){
+                return assignment;
+            }
+        }
+        throw new RuntimeException("Couldn't find assignment by the id: " + id);
+    }
+
     void addAssignment(
             String name, String optionalNote, String dueDate, Integer courseId) {
         ContentValues contentValues = new ContentValues();
@@ -557,4 +665,24 @@ public class DBUtils {
         assignments.clear();
         assignments = getAssignments();
     }
+
+    HashMap<String, String> getAssignmentDates(){
+        HashMap<String, String> output = new HashMap<>();
+        String[] columns = {"id", "due_date"};
+        Cursor cursor = db.query("assignment", columns, null, null, null, null, null);
+        while (cursor.moveToNext()){
+            output.put(cursor.getString(0), cursor.getString(1));
+        }
+        return output;
+    }
+
+    String getAssignmentNameById(int id){
+        for(Assignment assignment: assignments){
+            if(assignment.getId() == id){
+                return assignment.getName();
+            }
+        }
+        throw new RuntimeException("Couldn't find assignment name by id");
+    }
+
 }

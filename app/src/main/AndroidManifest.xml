@@ -4,12 +4,17 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/moblie_application_class_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/moblie_application_class_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AssignmentActivity"></activity>
+        <service
+            android:name=".CheckForDateService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".AssignmentActivity" />
         <activity android:name=".AddModifyCourse" />
         <activity android:name=".AddModifyAssignment" />
         <activity android:name=".CourseActivity" />

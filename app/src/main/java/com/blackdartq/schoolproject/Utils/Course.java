@@ -9,6 +9,7 @@ public class Course {
     private String mentorNames;
     private String phoneNumber;
     private String email;
+    private String optionalNote;
     private Integer termId;
 
 
@@ -16,7 +17,7 @@ public class Course {
     public Course(
             int id, String name, String startDate,
             String endDate, String status, String mentorName,
-            String phoneNumber, String email, int termId){
+            String phoneNumber, String email, String optionalNote, int termId){
         this.setId(id);
         this.setName(name);
         this.setStartDate(startDate);
@@ -25,6 +26,7 @@ public class Course {
         this.setMentorNames(mentorName);
         this.setPhoneNumber(phoneNumber);
         this.setEmail(email);
+        this.setOptionalNote(optionalNote);
         this.setTermId(termId);
     }
 
@@ -51,7 +53,6 @@ public class Course {
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
-
 
     public int getId() {
         return id;
@@ -99,5 +100,13 @@ public class Course {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getOptionalNote() {
+        return optionalNote;
+    }
+
+    public void setOptionalNote(String optionalNote) {
+        this.optionalNote = optionalNote;
     }
 }

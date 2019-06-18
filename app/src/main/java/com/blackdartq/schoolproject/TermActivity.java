@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 public class TermActivity extends AppCompatActivity {
 
-    int BLUE = Color.parseColor("#4a97a7");
-
     // views
     ScrollView termScrollView;
     LinearLayout termLinearLayout;
@@ -35,7 +33,7 @@ public class TermActivity extends AppCompatActivity {
     Toolbar termActivityToolbar;
 
     private static final String TAG = TermActivity.class.getSimpleName();
-    DBUtils dbUtils = new DBUtils();
+    DBUtils dbUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class TermActivity extends AppCompatActivity {
 //        Toolbar toolbar = findViewById(R.id.termActivityToolbar);
 //        setSupportActionBar(toolbar);
         buttonHolder = new ArrayList<>();
-        dbUtils = new DBUtils();
+        dbUtils = new DBUtils(false);
         termScrollView = findViewById(R.id.termScrollView);
         termLinearLayout = findViewById(R.id.termLinearLayout);
         addTermButton = findViewById(R.id.addTermButton);
@@ -69,10 +67,6 @@ public class TermActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TermActivity.this, AddModifyTerm.class);
                 try{
-                    Term termData = dbUtils.getTermFromIndex(selectedTerm);
-                    intent.putExtra("termNameLoader", termData.getName());
-                    intent.putExtra("startDateLoader", termData.getStartDate());
-                    intent.putExtra("endDateLoader", termData.getEndDate());
                     intent.putExtra("modifying", true);
                     int termIdFromIndex = dbUtils.getTermIdFromIndex(selectedTerm);
                     intent.putExtra("termIdLoader", termIdFromIndex);
@@ -134,7 +128,7 @@ public class TermActivity extends AppCompatActivity {
     void createTermButton(final Term term) {
         final Button button = new Button(this);
         button.setText(term.getName());
-        button.setBackgroundColor(BLUE);
+        button.setBackgroundColor(getResources().getColor(R.color.blackdartqGreen2));
         button.setTextColor(Color.WHITE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

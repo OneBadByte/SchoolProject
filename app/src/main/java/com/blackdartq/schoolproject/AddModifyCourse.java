@@ -1,15 +1,23 @@
 package com.blackdartq.schoolproject;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Scroller;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.blackdartq.schoolproject.Utils.Assignment;
 import com.blackdartq.schoolproject.Utils.Course;
 import com.blackdartq.schoolproject.Utils.Utils;
 
@@ -25,6 +33,9 @@ public class AddModifyCourse extends AppCompatActivity {
 
     Button courseSaveButton;
     Button courseCancelButton;
+    Button addAssignmentButton;
+    Button deleteAssignmentButton;
+    Button newAssignmentButton;
 
     EditText courseNameEditText;
     EditText startDateEditText;
@@ -33,20 +44,32 @@ public class AddModifyCourse extends AppCompatActivity {
     EditText mentorNameEditText;
     EditText phoneNumberEditText;
     EditText emailEditText;
+    EditText optionalNoteEditText;
 
     TextView messageTextView;
 
-    int termCurrentlySelected;
+    Spinner assignmentSpinner;
+
+    // Linear Layouts
+    LinearLayout assignmentLinearLayout;
+
+    Course course;
+
+   ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_modify_course);
-        dbUtils = new DBUtils();
+        dbUtils = new DBUtils(false);
         final Intent intent = getIntent();
 
         courseSaveButton = findViewById(R.id.courseSaveButton);
         courseCancelButton = findViewById(R.id.courseCancelButton);
+        addAssignmentButton = findViewById(R.id.addAssignmentButton);
+        deleteAssignmentButton = findViewById(R.id.deleteAssignmentButton);
+        newAssignmentButton = findViewById(R.id.newAssignmentButton);
+
         courseNameEditText = findViewById(R.id.courseNameEditText);
         startDateEditText = findViewById(R.id.startDateEditText);
         endDateEditText = findViewById(R.id.dueDateEditText);
@@ -54,27 +77,58 @@ public class AddModifyCourse extends AppCompatActivity {
         mentorNameEditText = findViewById(R.id.mentorNameEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
         emailEditText = findViewById(R.id.emailEditText);
-
-
         messageTextView = findViewById(R.id.messageTextView);
+        optionalNoteEditText = findViewById(R.id.optionalNotEditText);
 
-        courseNameEditText.setText(intent.getStringExtra("courseNameLoader"));
-        startDateEditText.setText(intent.getStringExtra("startDateLoader"));
-        endDateEditText.setText(intent.getStringExtra("endDateLoader"));
-        statusEditText.setText(intent.getStringExtra("statusLoader"));
-        mentorNameEditText.setText(intent.getStringExtra("mentorNameLoader"));
-        phoneNumberEditText.setText(intent.getStringExtra("phoneNumberLoader"));
-        emailEditText.setText(intent.getStringExtra("emailLoader"));
+        assignmentLinearLayout = findViewById(R.id.assignmentLinearLayout);
+        assignmentSpinner = findViewById(R.id.assignmentSpinner);
+
+        Course course = new Course();
+
+        int courseId = intent.getIntExtra("courseIdLoader", 666);
+        if(courseId != 666){
+            course = dbUtils.getCourseFromId(courseId);
+            courseNameEditText.setText(course.getName());
+            startDateEditText.setText(course.getStartDate());
+            endDateEditText.setText(course.getEndDate());
+            statusEditText.setText(course.getStatus());
+            mentorNameEditText.setText(course.getMentorNames());
+            phoneNumberEditText.setText(course.getPhoneNumber());
+            System.out.println("OPTIONAL NOTE: " + course.getOptionalNote());
+            optionalNoteEditText.setText(course.getOptionalNote());
+            emailEditText.setText(course.getEmail());
+
+        }
+
+        final Course finalCourse = course;
+        addAssignmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int assignmentIndex = assignmentSpinner.getSelectedItemPosition();
+                int assignmentId = dbUtils.getAssignmentIdFromIndex(assignmentIndex);
+                dbUtils.addCourseIdToAssignmentById(finalCourse.getId(), assignmentId);
+                generateAssignmentLinearLayout(finalCourse);
+            }
+        });
+
+        deleteAssignmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int assignmentIndex = assignmentSpinner.getSelectedItemPosition();
+                int assignmentId = dbUtils.getAssignmentIdFromIndex(assignmentIndex);
+                dbUtils.removeCourseByAssignmentId(assignmentId);
+                generateAssignmentLinearLayout(finalCourse);
+
+            }
+        });
 
         courseSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkInputFieldsAreValid() ){
                     if(intent.getBooleanExtra("modifying", false)){
-                        int courseId = dbUtils.getCourseIdFromIndex(intent.getIntExtra("courseIndex", 0));
-
                         dbUtils.updateCourse(new Course(
-                                courseId,
+                                finalCourse.getId(),
                                 courseNameEditText.getText().toString(),
                                 startDateEditText.getText().toString(),
                                 endDateEditText.getText().toString(),
@@ -82,6 +136,7 @@ public class AddModifyCourse extends AppCompatActivity {
                                 mentorNameEditText.getText().toString(),
                                 phoneNumberEditText.getText().toString(),
                                 emailEditText.getText().toString(),
+                                optionalNoteEditText.getText().toString(),
                                 0
 
                         ));
@@ -95,11 +150,20 @@ public class AddModifyCourse extends AppCompatActivity {
                                 mentorNameEditText.getText().toString(),
                                 phoneNumberEditText.getText().toString(),
                                 emailEditText.getText().toString(),
+                                optionalNoteEditText.getText().toString(),
                                 0
                         );
                     }
                     startActivity(new Intent(AddModifyCourse.this, CourseActivity.class));
                 }
+            }
+        });
+
+        newAssignmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddModifyCourse.this, AddModifyAssignment.class);
+                startActivity(intent);
             }
         });
 
@@ -172,6 +236,43 @@ public class AddModifyCourse extends AppCompatActivity {
                 }
             }
         });
+        generateAssignmentLinearLayout(course);
+
+    }
+
+    void generateAssignmentLinearLayout(Course course){
+        // adds all the assignments to the assignment linear layout
+        assignmentLinearLayout.removeAllViewsInLayout();
+        ArrayList<Assignment> assignments = dbUtils.getAssignments();
+        ArrayList<String> assignmentNames = new ArrayList<>();
+
+        for(Assignment assignment : assignments) {
+            assignmentNames.add(assignment.getName());
+            if (course.getId() == assignment.getCourseId()) {
+                final Button button = new Button(this);
+                button.setText(assignment.getName());
+                button.setTextColor(Color.WHITE);
+                button.setBackgroundColor(getResources().getColor(R.color.blackdartqBlue));
+//                button.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                        int backgroundColor = ((ColorDrawable) button.getBackground()).getColor();
+//                        if (backgroundColor == Color.WHITE) {
+//                            button.setBackgroundColor(Color.BLUE);
+//                        } else {
+//                            button.setBackgroundColor(Color.WHITE);
+//                        }
+//                    }
+//                });
+                assignmentLinearLayout.addView(button);
+            }
+        }
+
+        // adds an arrayAdapter with all the assignment names to the spinner
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, assignmentNames);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        assignmentSpinner.setAdapter(arrayAdapter);
+
     }
 
     /**
@@ -189,6 +290,13 @@ public class AddModifyCourse extends AppCompatActivity {
     void sendMessage(String message){
         messageTextView.setText(message);
     }
+
+//    int getIndexOfSpinner(){
+//        for(int i = 0; i < arrayAdapter.getCount(); i++){
+//            Object testingObject = arrayAdapter.getItem(i);
+//            if(i == arrayAdapter.getPosition(testingObject));
+//        }
+//    }
 
     boolean textIsValidDate(String date){
         String[] dateBrokenUpBySlashes = date.split("/");

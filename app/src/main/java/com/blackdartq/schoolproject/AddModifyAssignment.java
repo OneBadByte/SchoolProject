@@ -37,7 +37,7 @@ public class AddModifyAssignment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_modify_assignment);
-        dbUtils = new DBUtils();
+        dbUtils = new DBUtils(false);
         final Intent intent = getIntent();
 
         assignmentSaveButton = findViewById(R.id.assignmentSaveButton);
@@ -45,13 +45,18 @@ public class AddModifyAssignment extends AppCompatActivity {
         assignmentNameEditText = findViewById(R.id.assignmentNameEditText);
         dueDateEditText = findViewById(R.id.dueDateEditText);
         optionalNoteEditText = findViewById(R.id.optionalNoteEditText);
-
+        Assignment assignment = new Assignment();
 
         messageTextView = findViewById(R.id.messageTextView);
 
-        assignmentNameEditText.setText(intent.getStringExtra("assignmentNameLoader"));
-        assignmentNameEditText.setText(intent.getStringExtra("optionalNoteLoader"));
-        dueDateEditText.setText(intent.getStringExtra("dueDateLoader"));
+        int assignmentId = intent.getIntExtra("assignmentIdLoader", 666);
+        if(assignmentId != 666){
+            assignment = dbUtils.getAssignmentFromId(assignmentId);
+            assignmentNameEditText.setText(assignment.getName());
+            optionalNoteEditText.setText(assignment.getOptionalNote());
+            dueDateEditText.setText(assignment.getDueDate());
+        }
+
 
         assignmentSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override

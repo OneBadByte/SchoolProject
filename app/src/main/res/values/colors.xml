@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="blackdartqBlue">#4a97a7</color>
     <color name="blackdartqGreen">#9ece9a</color>
+    <color name="blackdartqBlueGreen">#78b5a0</color>
+    <color name="blackdartqGreen2">#8dc39d</color>
 </resources>

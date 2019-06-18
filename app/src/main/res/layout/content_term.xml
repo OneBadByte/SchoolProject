@@ -9,67 +9,71 @@
     tools:context=".TermActivity2"
     tools:showIn="@layout/activity_term">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="-41dp"
-        tools:layout_editor_absoluteY="16dp">
-
-        <ScrollView
-            android:id="@+id/termScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="667dp">
-
-            <LinearLayout
-                android:id="@+id/termLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </ScrollView>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/addTermButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Add"
-                android:textColor="@android:color/white" />
+            <ScrollView
+                android:id="@+id/termScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="667dp"
+                android:nestedScrollingEnabled="true">
 
-            <Button
-                android:id="@+id/modifyTermButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Modify"
-                android:textColor="@android:color/white" />
+                <LinearLayout
+                    android:id="@+id/termLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
 
-            <Button
-                android:id="@+id/deleteTermButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Delete"
-                android:textColor="@android:color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/backTermButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="back  "
-                android:textColor="@android:color/white" />
+                <Button
+                    android:id="@+id/addTermButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Add"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/modifyTermButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Modify"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/deleteTermButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Delete"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/backTermButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="back  "
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

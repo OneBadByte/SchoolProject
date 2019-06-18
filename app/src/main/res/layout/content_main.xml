@@ -7,82 +7,103 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F2F6F3"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/alertEditText"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="#4a97a7"
-            android:clickable="false"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="none"
-            android:textAlignment="center"
-            android:textColor="#F2f6f3" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="669dp"
-            android:background="#f2f6f3">
-
-            <ScrollView
-                android:id="@+id/mainScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/termAndCourseLinearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </FrameLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/navBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="#F2F6F3"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/termButton"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:fontFamily="sans-serif-black"
-                android:text="Term"
-                android:textColor="#f2f6f3"
-                android:textSize="20sp" />
+            <EditText
+                android:id="@+id/alertEditText"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:autofillHints="@string/app_name"
+                android:background="#4a97a7"
+                android:clickable="false"
+                android:editable="false"
+                android:elevation="20dp"
+                android:ems="10"
+                android:inputType="none"
+                android:textAlignment="center"
+                android:textColor="#F2f6f3" />
 
-            <Button
-                android:id="@+id/coursesButton"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:ems="2"
-                android:fontFamily="sans-serif-black"
-                android:text="Courses"
-                android:textColor="#f2f6f3"
-                android:textSize="20sp" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:indeterminate="false"
+                android:max="100"
+                android:maxHeight="30dp"
+                android:progress="2"
+                android:progressTint="@color/blackdartqGreen2" />
 
-            <Button
-                android:id="@+id/assignmentsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_weight="1"
-                android:background="@color/blackdartqGreen"
-                android:text="Assignment"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="669dp"
+                android:background="#f2f6f3"
+                android:paddingTop="1dp">
+
+                <ScrollView
+                    android:id="@+id/mainScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="true">
+
+                    <LinearLayout
+                        android:id="@+id/termAndCourseLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+                </ScrollView>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/navBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/termButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Term"
+                    android:textColor="#f2f6f3"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/coursesButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:ems="2"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Courses"
+                    android:textColor="#f2f6f3"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/assignmentsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:background="@color/blackdartqGreen"
+                    android:text="Assignment"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

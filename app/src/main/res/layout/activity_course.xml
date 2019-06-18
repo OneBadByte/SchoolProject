@@ -6,70 +6,80 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:layout_constraintTop_toBottomOf="parent"
-    tools:context=".CourseActivity"
-    tools:showIn="@layout/activity_course">
+    tools:context=".CourseActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="-41dp"
-        tools:layout_editor_absoluteY="16dp">
-
-        <ScrollView
-            android:id="@+id/courseScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="667dp">
-
-            <LinearLayout
-                android:id="@+id/courseLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </ScrollView>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/addCourseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Add"
-                android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/courseMessageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/blackdartqBlue"
+                android:textSize="22sp" />
 
-            <Button
-                android:id="@+id/modifyCourseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Modify"
-                android:textColor="@android:color/white" />
+            <ScrollView
+                android:id="@+id/courseScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="677dp"
+                android:nestedScrollingEnabled="true">
 
-            <Button
-                android:id="@+id/deleteCourseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="Delete"
-                android:textColor="@android:color/white" />
+                <LinearLayout
+                    android:id="@+id/courseLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
 
-            <Button
-                android:id="@+id/backCourseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#9ece9a"
-                android:text="back  "
-                android:textColor="@android:color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addCourseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Add"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/modifyCourseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Modify"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/deleteCourseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="Delete"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/backCourseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#9ece9a"
+                    android:text="back  "
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

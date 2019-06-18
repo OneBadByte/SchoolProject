@@ -2,6 +2,7 @@ package com.blackdartq.schoolproject;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,13 +11,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.blackdartq.schoolproject.Utils.Assignment;
 import com.blackdartq.schoolproject.Utils.Course;
 
 import java.util.ArrayList;
 
 public class CourseActivity extends AppCompatActivity {
-
-    int BLUE = Color.parseColor("#4a97a7");
 
     // views
     ScrollView courseScrollView;
@@ -28,19 +28,20 @@ public class CourseActivity extends AppCompatActivity {
     Button deleteCourseButton;
     Button backCourseButton;
 
+
     ArrayList<Button> buttonHolder;
 
     int selectedCourse = 0;
 
     private static final String TAG = CourseActivity.class.getSimpleName();
-    DBUtils dbUtils = new DBUtils();
+    DBUtils dbUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
         buttonHolder = new ArrayList<>();
-        dbUtils = new DBUtils();
+        dbUtils = new DBUtils(false);
         courseScrollView = findViewById(R.id.courseScrollView);
         courseLinearLayout = findViewById(R.id.courseLinearLayout);
         addCourseButton = findViewById(R.id.addCourseButton);
@@ -66,15 +67,8 @@ public class CourseActivity extends AppCompatActivity {
                     Intent intent = new Intent(CourseActivity.this, AddModifyCourse.class);
 
                     Course courseData = dbUtils.getCourseFromIndex(selectedCourse);
-                    intent.putExtra("courseNameLoader", courseData.getName());
-                    intent.putExtra("startDateLoader", courseData.getStartDate());
-                    intent.putExtra("endDateLoader", courseData.getEndDate());
-                    intent.putExtra("statusLoader", courseData.getStatus());
-                    intent.putExtra("mentorNameLoader", courseData.getMentorNames());
-                    intent.putExtra("phoneNumberLoader", courseData.getPhoneNumber());
-                    intent.putExtra("emailLoader", courseData.getEmail());
+                    intent.putExtra("courseIdLoader", courseData.getId());
                     intent.putExtra("modifying", true);
-
                     startActivity(intent);
                 } catch (Exception e){}
             }
@@ -95,6 +89,7 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     void addCourseButtonsToUI(){
@@ -110,7 +105,7 @@ public class CourseActivity extends AppCompatActivity {
     void createCourseButton(final Course course) {
         final Button button = new Button(this);
         button.setText(course.getName());
-        button.setBackgroundColor(BLUE);
+        button.setBackgroundColor(getResources().getColor(R.color.blackdartqBlueGreen));
         button.setTextColor(Color.WHITE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,16 +37,13 @@ public class AddModifyTerm extends AppCompatActivity {
     EditText endDateEditText;
 
     TextView messageTextView;
-//    int termId = 0;
-    int selectedTermIdFromCourse = 0;
-    int selectedCourseId = 0;
     Term term;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_modify_term);
-        dbUtils = new DBUtils();
+        dbUtils = new DBUtils(false);
         term = new Term();
 
         termSaveButton = findViewById(R.id.termSaveButton);
@@ -61,7 +58,6 @@ public class AddModifyTerm extends AppCompatActivity {
         final Integer defaultTermId = 666;
         final Intent intent = getIntent();
         term.setId(intent.getIntExtra("termIdLoader", 666));
-        System.out.println("HIT: " + term.getId());
         if(term.getId().equals(defaultTermId)){
             term.setId(dbUtils.addTerm());
         }
@@ -79,17 +75,6 @@ public class AddModifyTerm extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkInputFieldsAreValid() ) {
-////                    if(intent.getBooleanExtra("modifying", false)){
-//                        term.setName(Utils.getTextFromEditText(termNameEditText));
-//                        term.setStartDate(Utils.getTextFromEditText(startDateEditText));
-//                        term.setEndDate(Utils.getTextFromEditText(endDateEditText));
-//                        dbUtils.updateTerm(term);
-//                    }else{
-//                        dbUtils.addTerm(
-//                                termNameEditText.getText().toString(),
-//                                startDateEditText.getText().toString(),
-//                                endDateEditText.getText().toString()
-//                        );
                     term.setName(Utils.getTextFromEditText(termNameEditText));
                     term.setStartDate(Utils.getTextFromEditText(startDateEditText));
                     term.setEndDate(Utils.getTextFromEditText(endDateEditText));
@@ -192,12 +177,17 @@ public class AddModifyTerm extends AppCompatActivity {
         for(Course course : dbUtils.getCourses()){
             // checks if the term contains the course id in its ArrayList of course Ids
             if(term.getCourseIdsFromTerm().contains(course.getId())){
-                courseSelectorLinearLayout.addView(createCourseButton(course, Color.GREEN, Color.RED, true));
+                courseSelectorLinearLayout.addView(createCourseButton(course, getResources().getColor(R.color.blackdartqBlueGreen), getResources().getColor(R.color.blackdartqBlue), true));
             }else{
                 if(course.getTermId() == null){
                     courseSelectorLinearLayout.addView(createCourseButton(course));
                 }else{
-                    courseSelectorLinearLayout.addView(createCourseButton(course, Color.MAGENTA, Color.MAGENTA, false));
+                    courseSelectorLinearLayout.addView(
+                            createCourseButton(course,
+                            getResources().getColor(R.color.blackdartqGreen2),
+                            getResources().getColor(R.color.blackdartqGreen2),
+                            false)
+                    );
                 }
             }
         }
@@ -209,7 +199,7 @@ public class AddModifyTerm extends AppCompatActivity {
      * @return
      */
     Button createCourseButton(final Course course){
-        return createCourseButton(course, Color.WHITE, Color.BLUE, true);
+        return createCourseButton(course, Color.WHITE, getResources().getColor(R.color.blackdartqBlue), true);
     }
 
     /**
@@ -232,7 +222,11 @@ public class AddModifyTerm extends AppCompatActivity {
                     int backgroundColor = ((ColorDrawable) button.getBackground()).getColor();
                     if(backgroundColor == Color.WHITE){
                         dbUtils.removeTermIdByCourseId(course.getId());
-                        term.removeCourseIdFromTermByCourseId(course.getId());
+                        try{
+                            term.removeCourseIdFromTermByCourseId(course.getId());
+                        } catch (Exception e){
+                            System.out.println("couldn't delete course Id from term Id");
+                        }
                     }else{
                         dbUtils.addTermIdToCourseById(term.getId(), course.getId());
                         term.appendCourseIdToTerm(course.getId());
